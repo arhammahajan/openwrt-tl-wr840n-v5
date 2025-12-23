@@ -68,6 +68,7 @@ sysupgrade /tmp/openwrt-19.07.10-ramips-mt76x8-tl-wr840n-v5-squashfs-sysupgrade.
 5. you could also use hostapd-wolfssl instead of wpad-wolfssl, as its a lighter package. But for 802.11r fast roaming support on SAE, i would suggest to go ahead with the wpad-wolfssl package only
 6. v4 and v5 versions of this device are the best candidates. with the v6, the ram has been further reduced. for anyone interested, i have added links for unofficial v6 support as well in the references
 7. in case you brick your device (flashing red led), you will need to restore it via tftp
+8. you can ssh into router by `ssh -oHostKeyAlgorithms=+ssh-rsa root@192.168.1.1`
 
 ## References
 [https://community.onion.io/topic/4992/official-openwrt-package-repos-are-no-longer-valid]()
