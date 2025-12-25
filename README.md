@@ -42,7 +42,7 @@ The firmware is available in [https://archive.openwrt.org/releases/18.06.9/targe
 ### Step-4
 Now, we can actually build the image. The below command has been adapted to my configuration and will build a very stripped down version of OpenWrt. If you are unsure of anything, please refer to the official guide. [https://openwrt.org/docs/guide-user/additional-software/imagebuilder]()
 ```sh
-make FORCE=1 image PROFILE="tl-wr840n-v5" PACKAGES="-wpad-basic -luci-ssl -ppp -ppp-mod-pppoe -dnsmasq -odhcpd -odhcpd-ipv6only -opkg -luci-app-firewall -luci-proto-ppp -luci-app-opkg -uclient-fetch -usign -jshn -jsonfilter -kmod-ipt-offload -kmod-nf-flow -kmod-nf-nat -kmod-nft-nat -kmod-ipt-nat wpad-wolfssl" FILES="files"
+make FORCE=1 image PROFILE="tl-wr840n-v5" PACKAGES="-wpad-basic -luci-ssl -ppp -ppp-mod-pppoe -dnsmasq -odhcpd -odhcpd-ipv6only -opkg -luci-app-firewall -luci-proto-ppp -luci-app-opkg -uclient-fetch -usign -kmod-ipt-offload -kmod-nf-flow -kmod-nf-nat -kmod-nft-nat -kmod-ipt-nat wpad-wolfssl" FILES="files"
 ```
 
 If after running the above command, you still get an error regarding missing dependencies, given that you had followed the above steps correctly, you should run the following, in the root directory of the imagebuilder. Post this, the build should start.
@@ -60,6 +60,11 @@ ssh -oHostKeyAlgorithms=+ssh-rsa root@192.168.1.1
 sysupgrade /tmp/openwrt-19.07.10-ramips-mt76x8-tl-wr840n-v5-squashfs-sysupgrade.bin 
 ```
 
+### Appendix - make command for ipv6 enabled AP with luci web interface but no wpa3 support
+```sh
+make FORCE=1 image PROFILE="tl-wr840n-v5" PACKAGES="-wpad-basic -luci-ssl -ppp -ppp-mod-pppoe -dnsmasq -odhcpd -odhcpd-ipv6only -opkg -luci-proto-ppp -luci-app-opkg -uclient-fetch -usign -kmod-ipt-offload -kmod-nf-flow -kmod-nf-nat -kmod-nft-nat -kmod-ipt-nat luci-app-firewall luci-base luci-lib-ip luci-lib-jsonc luci-lib-nixio luci-mod-admin-full luci-mod-network luci-mod-status luci-mod-system luci-proto-ipv6 luci-theme-bootstrap rpcd uhttpd wpad-mini" FILES="files"
+```
+
 ### Additional notes
 1. in my current setup, since the overlay partition is living on the ram, I rebuild the image everytime I make config changes and then apply that to the router.
 2. do not flash the image without the dhcp server unless you have already configured the lan interface. if you do so, the router will not be able to assign ip addresses to your devices. to overcome this, you will need to obtain the ip manually
@@ -69,6 +74,7 @@ sysupgrade /tmp/openwrt-19.07.10-ramips-mt76x8-tl-wr840n-v5-squashfs-sysupgrade.
 6. v4 and v5 versions of this device are the best candidates. with the v6, the ram has been further reduced. for anyone interested, i have added links for unofficial v6 support as well in the references
 7. in case you brick your device (flashing red led), you will need to restore it via tftp
 8. you can ssh into router by `ssh -oHostKeyAlgorithms=+ssh-rsa root@192.168.1.1`
+9. you can check the list of packages installed using `cat /usr/lib/opkg/status`
 
 ## References
 [https://community.onion.io/topic/4992/official-openwrt-package-repos-are-no-longer-valid]()
